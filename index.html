@@ -225,10 +225,11 @@ var tk=false;window.addEventListener('scroll',function(){if(!tk){tk=true;request
 </script>
 <script type="module">
 /* === FIREBASE: cole aqui a configuração do seu projeto (Project settings > Your apps > Web). Vazio = modo local de demonstração. === */
-var FB={apiKey:'',authDomain:'',projectId:'',storageBucket:'',messagingSenderId:'',appId:''};
+var FB={apiKey:'AIzaSyBBOgIzaxg551fTTFlxAe36UVV9hUgA2QY',authDomain:'bonpan-3414b.firebaseapp.com',projectId:'bonpan-3414b',storageBucket:'bonpan-3414b.firebasestorage.app',messagingSenderId:'730452317189',appId:'1:730452317189:web:7c1ec88f28d2c71337f86c'};
 if(FB.projectId){
-var B='https://www.gstatic.com/firebasejs/10.14.1/';
-var [A,Au,Fs]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);
+var A=null,Au,Fs;
+for(var v of ['10.14.1','10.12.2','10.8.0']){try{var B='https://www.gstatic.com/firebasejs/'+v+'/';[A,Au,Fs]=await Promise.all([import(B+'firebase-app.js'),import(B+'firebase-auth.js'),import(B+'firebase-firestore.js')]);break}catch(e){A=null}}
+if(!A){console.warn('Firebase n\u00e3o carregou: verifique a conex\u00e3o, bloqueadores de an\u00fancio ou firewall.');toast('N\u00e3o foi poss\u00edvel conectar ao servidor. O site est\u00e1 em modo local.')}else{
 var sync={};window.U=null;localStorage.removeItem('bp_s');window.D=JSON.parse(D0);
 D.forEach(function(C){sync[C.id]=JSON.stringify(C.i)});
 var app=A.initializeApp(FB),auth=Au.getAuth(app),db=Fs.getFirestore(app);
@@ -239,7 +240,7 @@ function em(c){return({'auth/invalid-credential':'E-mail ou senha incorretos.','
 window.go=async function(){var e=$('le').value.trim().toLowerCase(),p=$('lp').value,m=$('lm');if(!/^\S+@\S+\.\S+$/.test(e)||p.length<6){m.textContent='Informe um e-mail válido e uma senha com 6 ou mais caracteres.';return}try{if(mode=='up'){var n=$('ln').value.trim();if(!n){m.textContent='Informe seu nome.';return}var cr=await Au.createUserWithEmailAndPassword(auth,e,p);await Au.updateProfile(cr.user,{displayName:n});if(window.U)window.U.n=n;ui()}else await Au.signInWithEmailAndPassword(auth,e,p);$('dl').close()}catch(x){m.textContent=em(x.code)}};
 window.persist=async function(){try{for(var C of D){var s=JSON.stringify(C.i);if(s===sync[C.id])continue;if(s.length>900000){alert('A categoria "'+C.t+'" ficou grande demais. Use imagens menores.');return}await Fs.setDoc(Fs.doc(db,'catalogo',C.id),{t:C.t,u:C.u,i:C.i.map(function(x){return{n:x[0],d:x[1]||'',p:x[2],m:x[3]||''}})});sync[C.id]=s}toast('Publicado para todos os clientes')}catch(x){alert(x.code=='permission-denied'?'Esta conta não tem permissão de administrador.':'Não foi possível salvar: '+x.message)}};
 document.addEventListener('click',async function(e){var b=e.target.closest('[data-a]');if(!b)return;if(b.dataset.a=='out')Au.signOut(auth);else if(b.dataset.a=='rs'){e.stopImmediatePropagation();if(confirm('Restaurar a lista original para todos os clientes?')){try{for(var C of D)await Fs.deleteDoc(Fs.doc(db,'catalogo',C.id));toast('Lista original restaurada')}catch(x){alert('Não foi possível restaurar.')}}}},true);
-}
+}}
 </script>
 </body>
 </html>
